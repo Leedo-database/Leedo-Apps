@@ -1,0 +1,6 @@
+{
+  "name": "LEEDO Employee Portal & Apps Dashboard",
+  "description": "Official employee apps portal and management system for LEEDO (Local Education and Economic Development Organization).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
