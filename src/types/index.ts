@@ -12,6 +12,12 @@ export interface Employee {
   isPasswordChanged?: boolean;
 }
 
+export interface AppCategory {
+  id: string;
+  name: string;
+  order: number;
+}
+
 export interface AppItem {
   id: string;
   title: string;

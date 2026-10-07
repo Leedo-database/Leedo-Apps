@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Link as LinkIcon, Type, Layers, Sparkles } from 'lucide-react';
-import { AppItem } from '../types';
+import { AppItem, AppCategory } from '../types';
 import { AVAILABLE_ICONS, AppIcon } from './AppIcon';
 
 interface EditAppModalProps {
   app: AppItem | null;
   isOpen: boolean;
   onClose: () => void;
+  categories: AppCategory[];
   onSave: (appId: string, updated: Partial<AppItem>) => void;
 }
 
@@ -14,6 +15,7 @@ export const EditAppModal: React.FC<EditAppModalProps> = ({
   app,
   isOpen,
   onClose,
+  categories,
   onSave,
 }) => {
   const [title, setTitle] = useState('');
@@ -161,13 +163,11 @@ export const EditAppModal: React.FC<EditAppModalProps> = ({
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#0f5b87]"
               >
-                <option value="Operations">Operations</option>
-                <option value="Admin & Finance">Admin & Finance</option>
-                <option value="Program & Operation">Program & Operation</option>
-                <option value="Logistics">Logistics</option>
-                <option value="Resources">Resources</option>
-                <option value="Security">Security</option>
-                <option value="General">General</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
 

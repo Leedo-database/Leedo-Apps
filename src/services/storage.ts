@@ -1,7 +1,8 @@
-import { Employee, AppItem, Notice, UserSession, BackgroundConfig } from '../types';
+import { Employee, AppItem, Notice, UserSession, BackgroundConfig, AppCategory } from '../types';
 import { INITIAL_EMPLOYEES } from '../data/employees';
 import { INITIAL_APPS } from '../data/defaultApps';
 import { INITIAL_NOTICES } from '../data/notices';
+import { INITIAL_CATEGORIES } from '../data/defaultCategories';
 
 const STORAGE_KEYS = {
   EMPLOYEES: 'leedo_employees_v1',
@@ -11,6 +12,7 @@ const STORAGE_KEYS = {
   REMEMBERED_EID: 'leedo_remembered_eid_v1',
   BACKGROUND_CONFIG: 'leedo_background_config_v1',
   CUSTOM_LOGO: 'leedo_custom_logo_v1',
+  CATEGORIES: 'leedo_categories_v1',
 };
 
 const DEFAULT_BG_CONFIG: BackgroundConfig = {
@@ -211,7 +213,91 @@ export const storage = {
 
   resetAppsToDefault(): AppItem[] {
     localStorage.setItem(STORAGE_KEYS.APPS, JSON.stringify(INITIAL_APPS));
+    localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
     return INITIAL_APPS;
+  },
+
+  getCategories(): AppCategory[] {
+    try {
+      const data = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
+      if (!data) {
+        localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(INITIAL_CATEGORIES));
+        return INITIAL_CATEGORIES;
+      }
+      return JSON.parse(data);
+    } catch {
+      return INITIAL_CATEGORIES;
+    }
+  },
+
+  saveCategories(categories: AppCategory[]) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+    } catch (e) {
+      console.error('Error saving categories:', e);
+    }
+  },
+
+  addCategory(name: string): AppCategory {
+    const list = this.getCategories();
+    const newCat: AppCategory = {
+      id: `cat-${Date.now()}`,
+      name: name.trim(),
+      order: list.length + 1,
+    };
+    list.push(newCat);
+    this.saveCategories(list);
+    return newCat;
+  },
+
+  renameCategory(id: string, newName: string): boolean {
+    const list = this.getCategories();
+    const target = list.find((c) => c.id === id);
+    if (!target) return false;
+
+    const oldName = target.name;
+    target.name = newName.trim();
+    this.saveCategories(list);
+
+    // Automatically update apps assigned to this category
+    const apps = this.getApps();
+    let updatedApps = false;
+    apps.forEach((app) => {
+      if (app.category === oldName) {
+        app.category = newName.trim();
+        updatedApps = true;
+      }
+    });
+
+    if (updatedApps) {
+      this.saveApps(apps);
+    }
+    return true;
+  },
+
+  deleteCategory(id: string): boolean {
+    const list = this.getCategories();
+    const target = list.find((c) => c.id === id);
+    if (!target) return false;
+
+    const oldName = target.name;
+    const filtered = list.filter((c) => c.id !== id);
+    this.saveCategories(filtered);
+
+    // Reassign apps of deleted category to 'General'
+    const apps = this.getApps();
+    let updatedApps = false;
+    apps.forEach((app) => {
+      if (app.category === oldName) {
+        app.category = 'General';
+        updatedApps = true;
+      }
+    });
+
+    if (updatedApps) {
+      this.saveApps(apps);
+    }
+    return true;
   },
 
   getBackgroundConfig(): BackgroundConfig {

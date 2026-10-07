@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import { X, Plus, Link as LinkIcon, Type, Layers, Check, Sparkles } from 'lucide-react';
-import { AppItem } from '../types';
+import { AppItem, AppCategory } from '../types';
 import { AVAILABLE_ICONS, AppIcon } from './AppIcon';
 
 interface AddAppModalProps {
   isOpen: boolean;
   onClose: () => void;
+  categories: AppCategory[];
   onAddApp: (newApp: Omit<AppItem, 'id' | 'createdAt'>) => void;
 }
 
 export const AddAppModal: React.FC<AddAppModalProps> = ({
   isOpen,
   onClose,
+  categories,
   onAddApp,
 }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
   const [icon, setIcon] = useState('globe');
-  const [category, setCategory] = useState('Operations');
+  const [category, setCategory] = useState(categories[0]?.name || 'Management');
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -168,13 +170,11 @@ export const AddAppModal: React.FC<AddAppModalProps> = ({
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#0f5b87]"
               >
-                <option value="Operations">Operations</option>
-                <option value="Admin & Finance">Admin & Finance</option>
-                <option value="Program & Operation">Program & Operation</option>
-                <option value="Logistics">Logistics</option>
-                <option value="Resources">Resources</option>
-                <option value="Security">Security</option>
-                <option value="General">General</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
 

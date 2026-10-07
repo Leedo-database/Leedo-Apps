@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { User, Lock, Eye, EyeOff, AlertCircle, ArrowRight, ShieldCheck, Info, Image as ImageIcon } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, AlertCircle, ArrowRight, ShieldCheck, Info } from 'lucide-react';
 import { LeedoLogo } from './LeedoLogo';
 import { storage } from '../services/storage';
 import { UserSession } from '../types';
 
 interface LoginFormProps {
   onLoginSuccess: (session: UserSession, isFirstTime: boolean) => void;
-  onOpenBgSettings: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onOpenBgSettings }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   const [eid, setEid] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -83,27 +82,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onOpenBgSe
     }, 300);
   };
 
-  const handleQuickDemo = (demoEid: string) => {
-    const emp = storage.getEmployeeByEid(demoEid);
-    if (emp) {
-      setEid(emp.eid);
-      setPassword(emp.password || emp.eid);
-      setError(null);
-    }
-  };
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 relative">
-      {/* Top Right Background Switcher button */}
-      <button
-        onClick={onOpenBgSettings}
-        className="absolute top-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/80 hover:bg-white text-slate-700 text-xs font-semibold backdrop-blur-sm shadow-md border border-white/60 transition-all cursor-pointer"
-        title="Change cover photo and blur effect"
-      >
-        <ImageIcon size={14} className="text-[#0f5b87]" />
-        <span>কভার ফটো (Background)</span>
-      </button>
-
       {/* Top Organization Header with exact LEEDO Logo */}
       <div className="flex flex-col items-center mb-6 text-center select-none animate-fadeIn">
         <div className="bg-white/95 backdrop-blur-sm px-6 py-4 rounded-2xl shadow-xl border border-white/40 mb-3 flex items-center justify-center">
@@ -210,40 +190,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, onOpenBgSe
             )}
           </button>
         </form>
-
-        {/* Quick Demo Credentials helper */}
-        <div className="mt-6 pt-5 border-t border-slate-100">
-          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider text-center mb-2.5">
-            Quick Demo Accounts (Click to test)
-          </p>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <button
-              type="button"
-              onClick={() => handleQuickDemo('1057')}
-              className="p-2 rounded-lg bg-blue-50/80 hover:bg-blue-100/90 text-blue-900 border border-blue-200/70 text-left transition-all cursor-pointer group"
-            >
-              <div className="font-bold flex items-center justify-between">
-                <span>EID: 1057</span>
-                <span className="text-[10px] bg-blue-600 text-white px-1.5 py-0.5 rounded font-mono">HR</span>
-              </div>
-              <div className="text-[11px] text-blue-800/80 truncate">Md. Omar Faruque</div>
-              <div className="text-[10px] text-blue-600">Can add, edit & delete apps</div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleQuickDemo('1007')}
-              className="p-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 text-left transition-all cursor-pointer"
-            >
-              <div className="font-bold flex items-center justify-between">
-                <span>EID: 1007</span>
-                <span className="text-[10px] bg-slate-500 text-white px-1.5 py-0.5 rounded font-mono">Staff</span>
-              </div>
-              <div className="text-[11px] text-slate-600 truncate">Athui Marma</div>
-              <div className="text-[10px] text-slate-500">Normal User View</div>
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Footer Info */}
