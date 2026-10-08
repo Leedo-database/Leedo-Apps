@@ -11,6 +11,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { BackgroundConfig } from '../types';
+import { compressImageFile } from '../utils/imageCompressor';
 
 interface BackgroundSettingsModalProps {
   isOpen: boolean;
@@ -66,7 +67,7 @@ export const BackgroundSettingsModal: React.FC<BackgroundSettingsModalProps> = (
 
   if (!isOpen) return null;
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setUploadError(null);
     const file = e.target.files?.[0];
     if (!file) return;
@@ -76,22 +77,13 @@ export const BackgroundSettingsModal: React.FC<BackgroundSettingsModalProps> = (
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError('ছবির আকার ৫ মেগাবাইটের নিচে হতে হবে (Image size must be under 5MB).');
-      return;
+    try {
+      const compressedDataUrl = await compressImageFile(file, 1280, 800, 0.75);
+      setImageUrl(compressedDataUrl);
+      setBgType('image');
+    } catch {
+      setUploadError('ছবি প্রসেস করতে সমস্যা হয়েছে (Failed to process image file).');
     }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setImageUrl(reader.result);
-        setBgType('image');
-      }
-    };
-    reader.onerror = () => {
-      setUploadError('ছবি আপলোড করতে সমস্যা হয়েছে (Failed to read image file).');
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleSave = () => {

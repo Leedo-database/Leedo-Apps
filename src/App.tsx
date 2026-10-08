@@ -11,6 +11,7 @@ import { EditAppModal } from './components/EditAppModal';
 import { HrAdminPanel } from './components/HrAdminPanel';
 import { BackgroundSettingsModal } from './components/BackgroundSettingsModal';
 import { CategoryManagerModal } from './components/CategoryManagerModal';
+import { LogoManagerModal } from './components/LogoManagerModal';
 import { storage } from './services/storage';
 import { AppItem, Notice, UserSession, BackgroundConfig, AppCategory } from './types';
 import {
@@ -21,6 +22,7 @@ import {
   Shield,
   Layers,
   Folder,
+  Sparkles,
 } from 'lucide-react';
 
 export default function App() {
@@ -31,6 +33,7 @@ export default function App() {
   const [categories, setCategories] = useState<AppCategory[]>([]);
   const [notices, setNotices] = useState<Notice[]>([]);
   const [bgConfig, setBgConfig] = useState<BackgroundConfig>(storage.getBackgroundConfig());
+  const [customLogo, setCustomLogo] = useState<string | null>(storage.getCustomLogo());
 
   // Category filter state
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -42,6 +45,7 @@ export default function App() {
   const [isHrPanelOpen, setIsHrPanelOpen] = useState(false);
   const [isBgSettingsOpen, setIsBgSettingsOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
   const [editingApp, setEditingApp] = useState<AppItem | null>(null);
 
   // HR quick edit mode for dashboard cards
@@ -52,12 +56,21 @@ export default function App() {
     url: string;
   } | null>(null);
 
-  // Initialize apps, categories and notices on mount (keep session null until user logs in)
+  // Initialize apps, categories and notices on mount & subscribe to Firestore cloud updates
   useEffect(() => {
-    setApps(storage.getApps());
-    setCategories(storage.getCategories());
-    setNotices(storage.getNotices());
-    setBgConfig(storage.getBackgroundConfig());
+    const syncData = () => {
+      setApps(storage.getApps());
+      setCategories(storage.getCategories());
+      setNotices(storage.getNotices());
+      setBgConfig(storage.getBackgroundConfig());
+      setCustomLogo(storage.getCustomLogo());
+    };
+
+    syncData();
+    const unsubscribe = storage.subscribe(syncData);
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const handleLoginSuccess = (newSession: UserSession, isFirstTime: boolean) => {
@@ -65,6 +78,7 @@ export default function App() {
     setApps(storage.getApps());
     setCategories(storage.getCategories());
     setNotices(storage.getNotices());
+    setCustomLogo(storage.getCustomLogo());
 
     if (isFirstTime) {
       setIsFirstTimeModalOpen(true);
@@ -81,6 +95,7 @@ export default function App() {
     setIsHrPanelOpen(false);
     setIsCategoryModalOpen(false);
     setIsBgSettingsOpen(false);
+    setIsLogoModalOpen(false);
     setEditingApp(null);
   };
 
@@ -154,6 +169,12 @@ export default function App() {
     setBgConfig(newConfig);
   };
 
+  // Logo update handler
+  const handleSaveLogo = (logoDataUrl: string | null) => {
+    storage.saveCustomLogo(logoDataUrl);
+    setCustomLogo(logoDataUrl);
+  };
+
   // Notices
   const handleAddNotice = (title: string, content: string, isImportant: boolean) => {
     if (!session) return;
@@ -193,7 +214,7 @@ export default function App() {
   if (!session) {
     return (
       <GeometricBackground config={bgConfig}>
-        <LoginForm onLoginSuccess={handleLoginSuccess} />
+        <LoginForm onLoginSuccess={handleLoginSuccess} logoSrc={customLogo} />
       </GeometricBackground>
     );
   }
@@ -204,6 +225,7 @@ export default function App() {
       <Navbar
         session={session}
         isHr={isHr}
+        logoSrc={customLogo}
         onLogout={handleLogout}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onScrollToNotices={handleScrollToNotices}
@@ -238,7 +260,7 @@ export default function App() {
                   )}
                 </h3>
                 <p className="text-xs text-slate-600">
-                  Manage app links, rename categories, delete apps, and customize cover photo.
+                  Manage app links, rename categories, delete apps, and customize logo or cover photo.
                 </p>
               </div>
             </div>
@@ -271,6 +293,15 @@ export default function App() {
               >
                 <Edit3 size={13} />
                 <span>{editMode ? 'Finish Editing' : 'Edit / Delete Apps'}</span>
+              </button>
+
+              <button
+                onClick={() => setIsLogoModalOpen(true)}
+                className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold border border-slate-200 transition-all cursor-pointer flex items-center gap-1.5"
+                title="Change or upload organization logo"
+              >
+                <Sparkles size={13} className="text-[#0f5b87]" />
+                <span>Change Logo</span>
               </button>
 
               <button
@@ -499,6 +530,16 @@ export default function App() {
           onRenameCategory={handleRenameCategory}
           onDeleteCategory={handleDeleteCategory}
           onResetCategories={handleResetCategories}
+        />
+      )}
+
+      {/* HR Logo Manager Modal (HR Only) */}
+      {isHr && (
+        <LogoManagerModal
+          isOpen={isLogoModalOpen}
+          onClose={() => setIsLogoModalOpen(false)}
+          currentLogo={customLogo}
+          onSaveLogo={handleSaveLogo}
         />
       )}
 

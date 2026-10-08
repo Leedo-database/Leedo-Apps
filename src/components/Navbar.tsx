@@ -6,6 +6,7 @@ import { UserSession } from '../types';
 interface NavbarProps {
   session: UserSession;
   isHr: boolean;
+  logoSrc?: string | null;
   onLogout: () => void;
   onOpenProfile: () => void;
   onScrollToNotices: () => void;
@@ -14,6 +15,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   session,
   isHr,
+  logoSrc,
   onLogout,
   onOpenProfile,
   onScrollToNotices,
@@ -23,7 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-3">
         {/* Left: Organization Branding */}
         <div className="flex items-center gap-3">
-          <LeedoLogo size="sm" layout="horizontal" showSubtitle={false} />
+          <LeedoLogo size="sm" layout="horizontal" showSubtitle={false} logoSrc={logoSrc} />
         </div>
 
         {/* Center: Clean general links */}

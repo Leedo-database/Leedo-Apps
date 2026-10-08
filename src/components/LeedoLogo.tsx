@@ -6,6 +6,7 @@ interface LeedoLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   layout?: 'horizontal' | 'vertical';
   showSubtitle?: boolean;
+  logoSrc?: string | null;
 }
 
 export const LeedoLogo: React.FC<LeedoLogoProps> = ({
@@ -13,12 +14,17 @@ export const LeedoLogo: React.FC<LeedoLogoProps> = ({
   size = 'md',
   layout = 'horizontal',
   showSubtitle = false,
+  logoSrc,
 }) => {
-  const [customLogo, setCustomLogo] = useState<string | null>(null);
+  const [internalLogo, setInternalLogo] = useState<string | null>(null);
 
   useEffect(() => {
-    setCustomLogo(storage.getCustomLogo());
-  }, []);
+    if (logoSrc === undefined) {
+      setInternalLogo(storage.getCustomLogo());
+    }
+  }, [logoSrc]);
+
+  const activeLogo = logoSrc !== undefined ? logoSrc : internalLogo;
 
   const sizeMap = {
     sm: { icon: 38, text: 'text-xl', height: 'h-9' },
@@ -30,12 +36,12 @@ export const LeedoLogo: React.FC<LeedoLogoProps> = ({
   const current = sizeMap[size];
 
   // If HR uploaded an image logo file (e.g. leedo-logo-1.png)
-  if (customLogo) {
+  if (activeLogo) {
     if (layout === 'vertical') {
       return (
         <div className={`flex flex-col items-center select-none ${className}`}>
           <img
-            src={customLogo}
+            src={activeLogo}
             alt="LEEDO"
             className={`${current.height} object-contain drop-shadow-sm`}
           />
@@ -45,7 +51,7 @@ export const LeedoLogo: React.FC<LeedoLogoProps> = ({
     return (
       <div className={`flex items-center gap-2 select-none ${className}`}>
         <img
-          src={customLogo}
+          src={activeLogo}
           alt="LEEDO"
           className={`${current.height} object-contain drop-shadow-sm`}
         />

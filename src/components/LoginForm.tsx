@@ -6,9 +6,10 @@ import { UserSession } from '../types';
 
 interface LoginFormProps {
   onLoginSuccess: (session: UserSession, isFirstTime: boolean) => void;
+  logoSrc?: string | null;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess, logoSrc }) => {
   const [eid, setEid] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
@@ -87,7 +88,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
       {/* Top Organization Header with exact LEEDO Logo */}
       <div className="flex flex-col items-center mb-6 text-center select-none animate-fadeIn">
         <div className="bg-white/95 backdrop-blur-sm px-6 py-4 rounded-2xl shadow-xl border border-white/40 mb-3 flex items-center justify-center">
-          <LeedoLogo size="lg" layout="vertical" showSubtitle={true} />
+          <LeedoLogo size="lg" layout="vertical" showSubtitle={true} logoSrc={logoSrc} />
         </div>
       </div>
 
