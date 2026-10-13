@@ -59,13 +59,6 @@ export const AppCard: React.FC<AppCardProps> = ({
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-100 rounded-full p-1 text-slate-500">
           <ArrowUpRight size={13} />
         </div>
-
-        {/* HR quick badge if custom */}
-        {app.isCustom && (
-          <span className="absolute bottom-1.5 left-2 text-[9px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.2 rounded font-mono">
-            CUSTOM
-          </span>
-        )}
       </div>
 
       {/* App Title underneath */}

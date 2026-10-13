@@ -332,8 +332,8 @@ class StorageService {
     const apps = this.getApps();
     const newApp: AppItem = {
       ...app,
-      id: `app-custom-${Date.now()}`,
-      isCustom: true,
+      id: `app-${Date.now()}`,
+      isCustom: false,
       createdAt: new Date().toISOString(),
       order: apps.length + 1,
     };

@@ -25,7 +25,29 @@ import {
   Truck,
   Building,
   Key,
-  HelpCircle,
+  Home,
+  Calculator,
+  MessageSquare,
+  Utensils,
+  Stethoscope,
+  BookOpen,
+  Award,
+  Bell,
+  Printer,
+  Cloud,
+  Camera,
+  Music,
+  Smile,
+  MapPin,
+  Target,
+  UserCheck,
+  BarChart3,
+  Laptop,
+  Clock,
+  FileSpreadsheet,
+  Folder,
+  PhoneCall,
+  Coins,
 } from 'lucide-react';
 
 interface AppIconProps {
@@ -38,6 +60,90 @@ export const AppIcon: React.FC<AppIconProps> = ({ name, className = '', size = 3
   const normalized = (name || '').toLowerCase().trim();
 
   switch (normalized) {
+    case 'home':
+    case 'peace-home':
+    case 'house':
+      return <Home size={size} className={className} strokeWidth={2.2} />;
+    case 'calculator':
+    case 'calc':
+    case 'accounts':
+      return <Calculator size={size} className={className} strokeWidth={2.2} />;
+    case 'coins':
+    case 'money':
+    case 'budget':
+      return <Coins size={size} className={className} strokeWidth={2.2} />;
+    case 'message':
+    case 'chat':
+    case 'communication':
+      return <MessageSquare size={size} className={className} strokeWidth={2.2} />;
+    case 'utensils':
+    case 'food':
+    case 'canteen':
+    case 'kitchen':
+      return <Utensils size={size} className={className} strokeWidth={2.2} />;
+    case 'stethoscope':
+    case 'health':
+    case 'medical':
+    case 'clinic':
+      return <Stethoscope size={size} className={className} strokeWidth={2.2} />;
+    case 'book':
+    case 'book-open':
+    case 'library':
+      return <BookOpen size={size} className={className} strokeWidth={2.2} />;
+    case 'user-check':
+    case 'attendance':
+      return <UserCheck size={size} className={className} strokeWidth={2.2} />;
+    case 'spreadsheet':
+    case 'excel':
+    case 'sheets':
+      return <FileSpreadsheet size={size} className={className} strokeWidth={2.2} />;
+    case 'chart':
+    case 'analytics':
+    case 'barchart':
+      return <BarChart3 size={size} className={className} strokeWidth={2.2} />;
+    case 'folder':
+    case 'program':
+    case 'projects':
+      return <Folder size={size} className={className} strokeWidth={2.2} />;
+    case 'clock':
+    case 'time':
+    case 'shift':
+      return <Clock size={size} className={className} strokeWidth={2.2} />;
+    case 'laptop':
+    case 'computer':
+    case 'it':
+      return <Laptop size={size} className={className} strokeWidth={2.2} />;
+    case 'camera':
+    case 'photo':
+    case 'media':
+      return <Camera size={size} className={className} strokeWidth={2.2} />;
+    case 'smile':
+    case 'child-care':
+    case 'recreation':
+      return <Smile size={size} className={className} strokeWidth={2.2} />;
+    case 'music':
+    case 'culture':
+      return <Music size={size} className={className} strokeWidth={2.2} />;
+    case 'map-pin':
+    case 'mappin':
+    case 'location':
+      return <MapPin size={size} className={className} strokeWidth={2.2} />;
+    case 'target':
+    case 'goal':
+      return <Target size={size} className={className} strokeWidth={2.2} />;
+    case 'award':
+    case 'achievement':
+      return <Award size={size} className={className} strokeWidth={2.2} />;
+    case 'bell':
+    case 'notice':
+    case 'alert':
+      return <Bell size={size} className={className} strokeWidth={2.2} />;
+    case 'printer':
+    case 'print':
+      return <Printer size={size} className={className} strokeWidth={2.2} />;
+    case 'cloud':
+    case 'drive':
+      return <Cloud size={size} className={className} strokeWidth={2.2} />;
     case 'ticket':
     case 'ticketing':
       return <Ticket size={size} className={className} strokeWidth={2.2} />;
@@ -59,7 +165,6 @@ export const AppIcon: React.FC<AppIconProps> = ({ name, className = '', size = 3
       return <CalendarDays size={size} className={className} strokeWidth={2.2} />;
     case 'video':
     case 'cctv':
-    case 'camera':
       return <Video size={size} className={className} strokeWidth={2.2} />;
     case 'hammer':
     case 'admin':
@@ -107,7 +212,8 @@ export const AppIcon: React.FC<AppIconProps> = ({ name, className = '', size = 3
     case 'heart':
       return <Heart size={size} className={className} strokeWidth={2.2} />;
     case 'phone':
-      return <Phone size={size} className={className} strokeWidth={2.2} />;
+    case 'phone-call':
+      return <PhoneCall size={size} className={className} strokeWidth={2.2} />;
     case 'mail':
       return <Mail size={size} className={className} strokeWidth={2.2} />;
     case 'settings':
@@ -118,20 +224,47 @@ export const AppIcon: React.FC<AppIconProps> = ({ name, className = '', size = 3
 };
 
 export const AVAILABLE_ICONS = [
+  { id: 'home', label: 'Peace Home / Shelter' },
+  { id: 'calculator', label: 'Accounts / Calculator' },
+  { id: 'coins', label: 'Finance / Budget' },
+  { id: 'message', label: 'Communication / Chat' },
+  { id: 'users', label: 'Staff / Directory / HR' },
+  { id: 'briefcase', label: 'Management / Executive' },
+  { id: 'folder', label: 'Program / Project Folder' },
+  { id: 'heart-handshake', label: 'Social Welfare / Children' },
+  { id: 'stethoscope', label: 'Health / Medical / Clinic' },
+  { id: 'utensils', label: 'Food / Canteen / Nutrition' },
+  { id: 'graduation-cap', label: 'Education / School' },
+  { id: 'book', label: 'Library / Curriculum' },
+  { id: 'user-check', label: 'Attendance / Verification' },
+  { id: 'spreadsheet', label: 'Spreadsheet / Excel' },
+  { id: 'chart', label: 'Analytics / Statistics' },
   { id: 'ticket', label: 'Ticket / Helpdesk' },
   { id: 'file-text', label: 'Documents / Legal' },
   { id: 'warehouse', label: 'Warehouse / Inventory' },
-  { id: 'lightbulb', label: 'Knowledge / Learning' },
-  { id: 'calendar', label: 'Calendar / Movement' },
-  { id: 'video', label: 'CCTV / Video' },
-  { id: 'globe', label: 'Web Portal / Online' },
-  { id: 'heart-handshake', label: 'Welfare / Community' },
-  { id: 'users', label: 'Staff / Directory' },
-  { id: 'briefcase', label: 'HR / Finance' },
-  { id: 'database', label: 'Database / Records' },
   { id: 'clipboard', label: 'Reports / Checklist' },
-  { id: 'graduation-cap', label: 'Education / School' },
+  { id: 'calendar', label: 'Calendar / Movement' },
+  { id: 'clock', label: 'Clock / Shifts / Hours' },
+  { id: 'video', label: 'CCTV / Video Monitoring' },
+  { id: 'camera', label: 'Photo / Media Gallery' },
+  { id: 'globe', label: 'Web Portal / Online' },
+  { id: 'laptop', label: 'IT Support / Systems' },
+  { id: 'cloud', label: 'Cloud Drive / Storage' },
+  { id: 'mail', label: 'Email / Inbox' },
+  { id: 'phone', label: 'Phone / Hotline' },
+  { id: 'bell', label: 'Notice / Announcements' },
+  { id: 'smile', label: 'Child Care / Recreation' },
+  { id: 'music', label: 'Cultural / Music' },
+  { id: 'map-pin', label: 'Location / Field Visit' },
   { id: 'shield', label: 'Security / Safety' },
+  { id: 'target', label: 'Goals / Targets' },
+  { id: 'award', label: 'Awards / Recognition' },
+  { id: 'printer', label: 'Printer / Print Station' },
   { id: 'truck', label: 'Transport / Logistics' },
-  { id: 'hammer', label: 'Tools / Admin' },
+  { id: 'building', label: 'Building / Office HQ' },
+  { id: 'key', label: 'Key / Access / Security' },
+  { id: 'lightbulb', label: 'Knowledge / Ideas' },
+  { id: 'heart', label: 'Donation / Care' },
+  { id: 'hammer', label: 'Tools / Admin Ops' },
+  { id: 'settings', label: 'Settings / Configuration' },
 ];

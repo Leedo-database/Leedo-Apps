@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, Link as LinkIcon, Type, Layers, Sparkles } from 'lucide-react';
+import { X, Check, Link as LinkIcon, Type, Layers, Sparkles, Search } from 'lucide-react';
 import { AppItem, AppCategory } from '../types';
 import { AVAILABLE_ICONS, AppIcon } from './AppIcon';
 
@@ -21,8 +21,9 @@ export const EditAppModal: React.FC<EditAppModalProps> = ({
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
   const [description, setDescription] = useState('');
-  const [icon, setIcon] = useState('globe');
-  const [category, setCategory] = useState('Operations');
+  const [icon, setIcon] = useState('home');
+  const [iconSearch, setIconSearch] = useState('');
+  const [category, setCategory] = useState('Management');
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,13 +31,20 @@ export const EditAppModal: React.FC<EditAppModalProps> = ({
       setTitle(app.title);
       setUrl(app.url);
       setDescription(app.description || '');
-      setIcon(app.icon || 'globe');
-      setCategory(app.category || 'Operations');
+      setIcon(app.icon || 'home');
+      setCategory(app.category || 'Management');
+      setIconSearch('');
       setError(null);
     }
   }, [app]);
 
   if (!isOpen || !app) return null;
+
+  const filteredIcons = AVAILABLE_ICONS.filter(
+    (item) =>
+      item.label.toLowerCase().includes(iconSearch.toLowerCase()) ||
+      item.id.toLowerCase().includes(iconSearch.toLowerCase())
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +89,7 @@ export const EditAppModal: React.FC<EditAppModalProps> = ({
             </div>
             <div>
               <h2 className="font-bold text-base">অ্যাপ সম্পাদনা করুন (Edit App)</h2>
-              <p className="text-[11px] text-blue-100">Update app name or destination link</p>
+              <p className="text-[11px] text-blue-100">Update app name, icon or destination link</p>
             </div>
           </div>
           <button
@@ -129,26 +137,56 @@ export const EditAppModal: React.FC<EditAppModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5">
-              <Sparkles size={14} className="text-[#0f5b87]" />
-              আইকন নির্বাচন করুন (Icon)
-            </label>
-            <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-xl max-h-32 overflow-y-auto">
-              {AVAILABLE_ICONS.map((item) => (
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
+                <Sparkles size={14} className="text-[#0f5b87]" />
+                আইকন নির্বাচন করুন (Icon)
+              </label>
+              <div className="flex items-center gap-1.5 text-xs">
+                <span className="text-[11px] text-slate-500">Selected:</span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[#0f5b87] font-semibold text-[11px]">
+                  <AppIcon name={icon} size={13} />
+                  {AVAILABLE_ICONS.find((i) => i.id === icon)?.label || icon}
+                </span>
+              </div>
+            </div>
+
+            {/* Quick search */}
+            <div className="relative mb-2">
+              <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                type="text"
+                value={iconSearch}
+                onChange={(e) => setIconSearch(e.target.value)}
+                placeholder="Search icons (e.g. home, money, chat, food, health, book)..."
+                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-[#0f5b87] focus:bg-white"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2 p-2.5 bg-slate-50 border border-slate-200 rounded-xl max-h-40 overflow-y-auto">
+              {filteredIcons.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setIcon(item.id)}
-                  className={`p-2 rounded-lg flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
+                  className={`p-2 rounded-xl flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                     icon === item.id
-                      ? 'bg-[#0f5b87] text-white shadow-xs'
-                      : 'bg-white hover:bg-slate-200/70 text-slate-700 border border-slate-200'
+                      ? 'bg-[#0f5b87] text-white shadow-sm ring-2 ring-[#0f5b87]/40 scale-105'
+                      : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200/80'
                   }`}
                   title={item.label}
                 >
                   <AppIcon name={item.id} size={20} />
+                  <span className="text-[9px] truncate w-full text-center leading-tight">
+                    {item.id}
+                  </span>
                 </button>
               ))}
+              {filteredIcons.length === 0 && (
+                <div className="col-span-full py-4 text-center text-xs text-slate-400">
+                  No matching icon found. Try another search term.
+                </div>
+              )}
             </div>
           </div>
 

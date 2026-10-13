@@ -134,16 +134,16 @@ export const HrAdminPanel: React.FC<HrAdminPanelProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-blue-50/70 p-4 rounded-xl border border-blue-200">
                 <div>
                   <h3 className="font-bold text-sm text-[#0b486b]">
-                    Customize Portal Applications
+                    Portal Applications Management
                   </h3>
                   <p className="text-xs text-slate-600 mt-0.5">
-                    Add new app cards with custom web links. Regular employees will see them on their dashboard and can click to open them.
+                    Add new app cards with web links. Regular employees will see them on their dashboard and can click to open them.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => {
-                      if (window.confirm('Reset all apps to original default list? Any custom added apps will be reset.')) {
+                      if (window.confirm('Reset all apps to original default list? Any newly added apps will be reset.')) {
                         storage.resetAppsToDefault();
                         onRefreshApps();
                         setActionNotice('Apps successfully reset to default LEEDO application list.');
