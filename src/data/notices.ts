@@ -7,6 +7,7 @@ export const INITIAL_NOTICES: Notice[] = [
     content: 'All Program Coordinators, Social Mobilizers, and Teachers are requested to submit their monthly progress reports by Thursday 5:00 PM.',
     date: 'Oct 05, 2026',
     author: 'Md. Omar Faruque (Manager HR & Admin)',
+    category: 'Meeting & Circular',
     isImportant: true,
   },
   {
@@ -15,6 +16,7 @@ export const INITIAL_NOTICES: Notice[] = [
     content: 'Health examination and psychosocial support session will be held at LEEDO Peace Home this coming Saturday. Mobile clinic teams are requested to prepare necessary medical kits.',
     date: 'Oct 02, 2026',
     author: 'Admin & Finance Department',
+    category: 'Peace Home & Welfare',
     isImportant: false,
   },
 ];

@@ -13,7 +13,7 @@ import { BackgroundSettingsModal } from './components/BackgroundSettingsModal';
 import { CategoryManagerModal } from './components/CategoryManagerModal';
 import { LogoManagerModal } from './components/LogoManagerModal';
 import { storage } from './services/storage';
-import { AppItem, Notice, UserSession, BackgroundConfig, AppCategory } from './types';
+import { AppItem, Notice, NoticeAttachment, UserSession, BackgroundConfig, AppCategory } from './types';
 import {
   Plus,
   ExternalLink,
@@ -176,10 +176,16 @@ export default function App() {
   };
 
   // Notices
-  const handleAddNotice = (title: string, content: string, isImportant: boolean) => {
+  const handleAddNotice = (
+    title: string,
+    content: string,
+    isImportant: boolean,
+    category: string,
+    attachment?: NoticeAttachment
+  ) => {
     if (!session) return;
     const authorName = `${session.name} (${session.designation})`;
-    storage.addNotice(title, content, authorName, isImportant);
+    storage.addNotice(title, content, authorName, isImportant, category, attachment);
     setNotices(storage.getNotices());
   };
 

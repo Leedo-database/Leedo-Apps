@@ -35,11 +35,21 @@
       "type": "object",
       "properties": {
         "id": { "type": "string", "maxLength": 100 },
-        "title": { "type": "string", "maxLength": 150 },
-        "content": { "type": "string", "maxLength": 2000 },
+        "title": { "type": "string", "maxLength": 250 },
+        "content": { "type": "string", "maxLength": 5000 },
         "date": { "type": "string", "maxLength": 50 },
         "author": { "type": "string", "maxLength": 100 },
-        "isImportant": { "type": "boolean" }
+        "category": { "type": "string", "maxLength": 100 },
+        "isImportant": { "type": "boolean" },
+        "attachment": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "url": { "type": "string" },
+            "type": { "type": "string" },
+            "size": { "type": "string" }
+          }
+        }
       },
       "required": ["id", "title", "content"]
     },

@@ -1,4 +1,4 @@
-import { Employee, AppItem, Notice, UserSession, BackgroundConfig, AppCategory } from '../types';
+import { Employee, AppItem, Notice, NoticeAttachment, UserSession, BackgroundConfig, AppCategory } from '../types';
 import { INITIAL_EMPLOYEES } from '../data/employees';
 import { INITIAL_APPS } from '../data/defaultApps';
 import { INITIAL_NOTICES } from '../data/notices';
@@ -528,7 +528,14 @@ class StorageService {
     }
   }
 
-  public addNotice(title: string, content: string, author: string, isImportant = false): Notice {
+  public addNotice(
+    title: string,
+    content: string,
+    author: string,
+    isImportant = false,
+    category = 'General',
+    attachment?: NoticeAttachment
+  ): Notice {
     const notices = this.getNotices();
     const newNotice: Notice = {
       id: `notice-${Date.now()}`,
@@ -536,6 +543,8 @@ class StorageService {
       content,
       author,
       isImportant,
+      category: category || 'General',
+      ...(attachment ? { attachment } : {}),
       date: new Date().toLocaleDateString('en-US', {
         month: 'short',
         day: '2-digit',

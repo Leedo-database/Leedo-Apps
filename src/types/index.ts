@@ -30,13 +30,22 @@ export interface AppItem {
   order?: number;
 }
 
+export interface NoticeAttachment {
+  name: string;
+  url: string; // Base64 data URL or external URL (e.g. Google Drive, web link)
+  type: 'pdf' | 'image' | 'doc' | 'link' | 'other';
+  size?: string;
+}
+
 export interface Notice {
   id: string;
   title: string;
   content: string;
   date: string;
   author: string;
+  category?: string;
   isImportant?: boolean;
+  attachment?: NoticeAttachment;
 }
 
 export interface BackgroundConfig {
